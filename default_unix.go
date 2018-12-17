@@ -3,14 +3,11 @@
 package main
 
 import (
-	"flag"
-	"os"
 	"fmt"
-	"os/exec"
 )
 
 const DEFAULT_STORE = `/tmp`
-var godaemon = flag.Bool("d", true, "run app as a daemon with -d=true")
+//var godaemon = flag.Bool("d", true, "run app as a daemon with -d=true")
 
 func pull(gitRoot string) error {
 	if gitRoot == "" {
@@ -24,7 +21,7 @@ func pull(gitRoot string) error {
 	return nil
 }
 
-func init() {
+/*func init() {
 
 	flag.Parse()
 
@@ -43,4 +40,4 @@ func init() {
 		fmt.Println("[PID]", cmd.Process.Pid)
 		os.Exit(0)
 	}
-}
+}*/
