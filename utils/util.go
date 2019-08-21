@@ -1,11 +1,11 @@
-package main
+package utils
 
 import (
 	"fmt"
 	"os/exec"
 )
 
-func runCommand(cwd, command string, args ...string) (string, error) {
+func RunCommand(cwd, command string, args ...string) (string, error) {
 
 	cmd := exec.Command(command, args...)
 	if cwd != "" {

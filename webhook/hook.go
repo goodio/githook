@@ -7,13 +7,18 @@ import (
 	"io/ioutil"
 	"net/http"
 	"time"
+	"github.com/ghaoo/githook/utils"
+	"github.com/ghaoo/githook/utils/logger"
+	"github.com/ghaoo/githook"
 )
+
+var log *logger.Log
 
 var root string
 
 var port = flag.String("port", "9900", "web hook listen port")
 var gitDir = flag.String("dir", "", "repository dir name")
-var storeDir = flag.String("store", DEFAULT_STORE, "store dir name")
+var storeDir = flag.String("store", githook.DEFAULT_STORE, "store dir name")
 
 func main() {
 
@@ -64,14 +69,14 @@ func webhook(w http.ResponseWriter, r *http.Request) {
 			root = res.Repository.Name
 		}
 
-		if err = pull(root); err != nil {
+		if err = githook.Pull(root); err != nil {
 			log.Errorf("更新失败：%v", err)
 			return
 		}
 
 		res.Repository.UpdatedAt = time.Now()
 
-		store, err := New(*storeDir, "hook.json")
+		store, err := utils.NewStore(*storeDir, "hook.json")
 
 		if err != nil {
 			log.Errorf("创建储存引擎失败：%v", err)
@@ -86,5 +91,17 @@ func webhook(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("123"))
 	}
 
+}
+
+func init() {
+
+	// 初始化
+	log = logger.NewLog(1000)
+
+	// 设置log级别
+	log.SetLevel("Debug")
+
+	// 设置输出引擎
+	log.SetEngine("file", `{"level":4, "spilt":"size", "filename":"`+*storeDir+`/hook.log", "maxsize":10}`)
 }
 

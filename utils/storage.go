@@ -1,4 +1,4 @@
-package main
+package utils
 
 import (
 	"bufio"
@@ -7,7 +7,7 @@ import (
 	"path"
 )
 
-func New(storpath, filename string) (*Storage, error) {
+func NewStore(storpath, filename string) (*Storage, error) {
 
 	// 检测文件夹是否存在   若不存在  创建文件夹
 	if _, err := os.Stat(storpath); err != nil {

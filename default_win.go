@@ -1,30 +1,33 @@
 // +build windows
 
-package main
+package githook
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/ghaoo/githook/utils"
+)
 
 const DEFAULT_STORE = "C:/HookTemp"
 
-func pull(gitRoot string) error {
+func Pull(gitRoot string) error {
 	if gitRoot == "" {
 		return fmt.Errorf("%s", "gitRoot is empty!!")
 	}
 
 	// 开发环境，谨慎拉取
-	if _, err := runCommand(gitRoot, "git", "pull"); err != nil {
+	if _, err := utils.RunCommand(gitRoot, "git", "pull"); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func push(gitRoot string) error {
+func Push(gitRoot string) error {
 	if gitRoot == "" {
 		return fmt.Errorf("%s", "gitRoot is empty!!")
 	}
 
-	if _, err := runCommand(gitRoot, "/bin/sh", "-c", "git push -u origin master -f"); err != nil {
+	if _, err := utils.RunCommand(gitRoot, "/bin/sh", "-c", "git push -u -f origin master"); err != nil {
 		return err
 	}
 
