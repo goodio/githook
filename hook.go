@@ -4,14 +4,10 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"hook/logger"
 	"io/ioutil"
 	"net/http"
-	"os/exec"
 	"time"
 )
-
-var log *logger.Log
 
 var root string
 
@@ -92,28 +88,3 @@ func webhook(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func runCommand(cwd, command string, args ...string) (string, error) {
-
-	cmd := exec.Command(command, args...)
-	if cwd != "" {
-		cmd.Dir = cwd
-	}
-	output, err := cmd.CombinedOutput()
-	if err != nil {
-		return "", fmt.Errorf("error running command: %v: %q", err, string(output))
-	}
-
-	return string(output), nil
-}
-
-func init() {
-
-	// 初始化
-	log = logger.NewLog(1000)
-
-	// 设置log级别
-	log.SetLevel("Debug")
-
-	// 设置输出引擎
-	log.SetEngine("file", `{"level":4, "spilt":"size", "filename":"`+*storeDir+`/hook.log", "maxsize":10}`)
-}
